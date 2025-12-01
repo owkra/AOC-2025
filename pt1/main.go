@@ -9,7 +9,7 @@ import (
 )
 
 type Rotation struct {
-	Dir   rune // 'L' or 'R'
+	Right bool
 	Steps int
 }
 
@@ -27,12 +27,12 @@ func loadRotations(path string) ([]Rotation, error) {
 		if line == "" {
 			continue
 		}
-		dir := rune(line[0])
+		dir := rune(line[0]) == 'R'
 		n, err := strconv.Atoi(strings.TrimSpace(line[1:]))
 		if err != nil {
 			return nil, fmt.Errorf("invalid rotation %q: %w", line, err)
 		}
-		out = append(out, Rotation{Dir: dir, Steps: n})
+		out = append(out, Rotation{Right: dir, Steps: n})
 	}
 	if err := s.Err(); err != nil {
 		return nil, err
@@ -42,9 +42,27 @@ func loadRotations(path string) ([]Rotation, error) {
 
 func main() {
 	const input = "input.txt"
-	_, err := loadRotations(input)
+	rotations, err := loadRotations(input)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load rotations: %v\n", err)
 		os.Exit(1)
 	}
+
+	zeroCount := 0
+	lockVal := 50
+	for _, rot := range rotations {
+		if rot.Right {
+			lockVal -= rot.Steps
+			lockVal = lockVal % 100
+		} else {
+			lockVal += rot.Steps
+			lockVal = lockVal % 100
+		}
+
+		if lockVal == 0 {
+			zeroCount++
+		}
+	}
+
+	fmt.Printf("Final code: %d\n", zeroCount)
 }
