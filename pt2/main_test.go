@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestCalculateCode(t *testing.T) {
+func TestInvalidIDs(t *testing.T) {
 	tests := []struct {
 		name      string
 		rotations []Rotation
@@ -45,4 +45,13 @@ func TestCalculateCode(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestInvalidIDIndividual(t *testing.T) {
+	got := CalculateCode(tc.rotations)
+
+	if got != tc.want {
+		t.Errorf("CalculateCode() = %d; want %d", got, tc.want)
+	}
+
 }
