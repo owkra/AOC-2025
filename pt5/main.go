@@ -25,7 +25,34 @@ func main() {
 		bank = append(bank, batteryRow)
 	}
 
-	fmt.Printf("Battery bank: %v", bank)
+	fmt.Printf("Joltage: %v", JoltageCalculation(bank))
 }
 
 type BatteryBank [][]int
+
+func JoltageCalculation(bank BatteryBank) int {
+	totalJoltage := 0
+	for _, row := range bank {
+		// scan through the row once, pick the greatest that furthest to the left and not at the end
+
+		tensIdx := 0
+		for i := 0; i < len(row)-1; i++ {
+			val := row[i]
+			if val > row[tensIdx] {
+				tensIdx = i
+			}
+		}
+
+		onesRow := row[tensIdx+1:]
+		onesIdx := 0
+		for i := 0; i < len(onesRow); i++ {
+			val := onesRow[i]
+			if val >= onesRow[onesIdx] {
+				onesIdx = i
+			}
+		}
+
+		totalJoltage += row[tensIdx]*10 + onesRow[onesIdx]
+	}
+	return totalJoltage
+}
