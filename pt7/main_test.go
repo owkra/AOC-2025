@@ -19,6 +19,6 @@ func TestCheckAccessiblePaper_SingleRow(t *testing.T) {
 
 	got := CheckAccessiblePaper(bank)
 	if got != want {
-		t.Errorf("JoltageCalculation() = %d; want %d", got, want)
+		t.Errorf("CheckAccessiblePaper() = %d; want %d", got, want)
 	}
 }
